@@ -23,15 +23,14 @@
   const DOMPurify = window.DOMPurify;
   const hljs      = window.hljs;
 
-  // ── DOM refs (resolved on DOMContentLoaded) ────────────────────────────────
-  let fileInput, dropOverlay, layout, mainArea, article;
+  // ── DOM refs used outside init() (resolved on DOMContentLoaded) ───────────
+  let layout, mainArea, article;
   let articleHeader, articleBody, tocNav, tocList, topbarMeta, siteFooter;
-  let btnPdf, btnOpen, btnOpenDrop;
+  let btnPdf;
 
   // ── marked: positional-argument renderer (correct for marked v12) ─────────
   marked.use({
     gfm: true,
-    breaks: false,
     renderer: {
       heading(text, level, raw) {
         const slug = String(raw).toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
@@ -216,8 +215,6 @@
 
   // ── Init on DOM ready ──────────────────────────────────────────────────────
   function init() {
-    fileInput     = document.getElementById('file-input');
-    dropOverlay   = document.getElementById('drop-overlay');
     layout        = document.getElementById('layout');
     mainArea      = document.getElementById('main-area');
     article       = document.getElementById('article');
@@ -227,9 +224,12 @@
     tocList       = document.getElementById('toc-list');
     topbarMeta    = document.getElementById('topbar-meta');
     siteFooter    = document.getElementById('site-footer');
-    btnPdf      = document.getElementById('btn-pdf');
-    btnOpen     = document.getElementById('btn-open');
-    btnOpenDrop = document.getElementById('btn-open-drop');
+    btnPdf        = document.getElementById('btn-pdf');
+
+    const fileInput   = document.getElementById('file-input');
+    const dropOverlay = document.getElementById('drop-overlay');
+    const btnOpen     = document.getElementById('btn-open');
+    const btnOpenDrop = document.getElementById('btn-open-drop');
 
     [btnOpen, btnOpenDrop].forEach(btn => btn.addEventListener('click', () => fileInput.click()));
     fileInput.addEventListener('change', e => {
@@ -246,8 +246,6 @@
     });
 
     btnPdf.addEventListener('click', exportPdf);
-
-    console.log('md2web ready. marked', marked.defaults ? 'v?' : 'loaded', '· DOMPurify', DOMPurify.version, '· hljs', hljs.versionString || 'loaded');
   }
 
   if (document.readyState === 'loading') {
