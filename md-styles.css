@@ -648,22 +648,28 @@ body {
 }
 
 /* ==========================================================================
-   Per-page top logo — only visible in print, repeats on every page via position:fixed
+   Per-page printable wrapper — table whose <thead> repeats on every printed page
    ========================================================================== */
-.print-page-logo { display: none; }
+/* On screen: the table structure is invisible; children flow as normal blocks.
+   display:contents removes the element from the layout box tree but keeps its children. */
+.print-paged,
+.print-paged > thead,
+.print-paged > tbody,
+.print-paged > thead > tr,
+.print-paged > tbody > tr {
+  display: contents;
+}
+.print-paged__top  { display: none; }      /* logo header hidden on screen */
+.print-paged__main { display: block; }      /* main content as plain block */
 
 /* ==========================================================================
    PRINT — A4 portrait, matches Quantica flyer rhythm
-   Based on PUB_ready/benchmark_AI.html print approach.
-   Per-page @page margins so every page (not just first/last) has breathing room.
-   Note: Chrome may still show its URL header in these margins unless the user
-   unticks "Headers and footers" in the print dialog — that setting cannot be
-   suppressed by CSS alone.
+   @page margin:0 suppresses Chrome's auto URL/page-number headers and footers.
+   Per-page padding comes from the table-header-group <thead> repeating at top.
    ========================================================================== */
 @page {
   size: A4 portrait;
-  /* top  right  bottom  left  — every page gets these margins */
-  margin: 26mm 18mm 24mm 18mm;
+  margin: 0;
 }
 
 @media print {
@@ -689,30 +695,45 @@ body {
 
   .layout, .layout--toc { padding-left: 0 !important; display: block !important; }
 
-  /* Article fills the page content box — @page margins (set above) handle per-page padding */
+  /* Article fills the page edge-to-edge. The table-paged wrapper handles per-page
+     top spacing via its repeating thead; bottom padding lives on the article itself. */
   .article {
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 0 0 24mm 0 !important;
     width: 100% !important;
   }
 
-  /* Per-page Quantica logo — position:fixed makes Chrome repeat it on every printed page.
-     top is negative so the logo sits INSIDE the @page top margin (above content). */
-  .print-page-logo {
-    display: block !important;
-    position: fixed;
-    top: -18mm;
-    left: 0;
-    right: 0;
-    text-align: left;
-    padding-left: 0;
+  /* Restore the table structure so display:table-header-group repeats on every page */
+  .print-paged {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse;
   }
-  .print-page-logo img {
-    display: inline-block;
-    height: 8mm;
+  .print-paged > thead         { display: table-header-group !important; }
+  .print-paged > tbody         { display: table-row-group    !important; }
+  .print-paged > thead > tr,
+  .print-paged > tbody > tr    { display: table-row          !important; }
+  .print-paged__top,
+  .print-paged__main           { display: table-cell         !important; padding: 0; }
+
+  /* The repeating per-page top: Quantica logo + leading spacing */
+  .print-paged__top {
+    padding: 14mm 18mm 8mm 18mm !important;
+  }
+  .print-paged__logo {
+    display: block;
+  }
+  .print-paged__logo img {
+    display: block;
+    height: 7mm;
     width: auto;
     margin: 0;
+  }
+
+  /* Main content cell — side padding only (top is from the thead repeat, bottom from .article) */
+  .print-paged__main {
+    padding: 0 18mm !important;
   }
 
   /* Text-level orphan/widow protection — no single lines at page top/bottom */
