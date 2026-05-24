@@ -72,15 +72,25 @@
     </main>
 
     <article class="article" id="article" hidden>
-      <div id="article-header"></div>
-      <div class="article__body" id="article-body"></div>
+      <!-- Per-page printable wrapper: the table's <thead> is repeated on every
+           printed page by Chrome (display: table-header-group). On screen the
+           table-related elements collapse to a plain block layout via display:contents. -->
+      <table class="print-paged" role="presentation">
+        <thead>
+          <tr><td class="print-paged__top">
+            <div class="print-paged__logo" aria-hidden="true">
+              <img src="assets/quantica-logo-color.png" alt="" />
+            </div>
+          </td></tr>
+        </thead>
+        <tbody>
+          <tr><td class="print-paged__main">
+            <div id="article-header"></div>
+            <div class="article__body" id="article-body"></div>
+          </td></tr>
+        </tbody>
+      </table>
     </article>
-
-    <!-- Per-page top logo — only visible when printing. position:fixed makes browsers
-         repeat it on every printed page (sits in the @page top margin). -->
-    <div class="print-page-logo" aria-hidden="true">
-      <img src="assets/quantica-logo-color.png" alt="" />
-    </div>
 
   </div>
 
