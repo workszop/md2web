@@ -239,7 +239,6 @@ body {
 }
 
 .dropzone__headline { color: var(--fg-1); margin-top: var(--space-2); }
-.dropzone__sub { color: var(--fg-2); }
 .dropzone__cta { margin-top: var(--space-2); }
 .dropzone__hint { color: var(--fg-4); max-width: 360px; margin-top: var(--space-2); }
 
