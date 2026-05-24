@@ -648,19 +648,22 @@ body {
 }
 
 /* ==========================================================================
-   Per-page printable wrapper — table whose <thead> repeats on every printed page
+   Per-page printable wrapper — table whose <thead>/<tfoot> repeat on every printed page
    ========================================================================== */
 /* On screen: the table structure is invisible; children flow as normal blocks.
    display:contents removes the element from the layout box tree but keeps its children. */
 .print-paged,
 .print-paged > thead,
 .print-paged > tbody,
+.print-paged > tfoot,
 .print-paged > thead > tr,
-.print-paged > tbody > tr {
+.print-paged > tbody > tr,
+.print-paged > tfoot > tr {
   display: contents;
 }
-.print-paged__top  { display: none; }      /* logo header hidden on screen */
-.print-paged__main { display: block; }      /* main content as plain block */
+.print-paged__top    { display: none; }     /* logo header hidden on screen */
+.print-paged__bottom { display: none; }     /* spacer footer hidden on screen */
+.print-paged__main   { display: block; }    /* main content as plain block */
 
 /* ==========================================================================
    PRINT — A4 portrait, matches Quantica flyer rhythm
@@ -695,16 +698,16 @@ body {
 
   .layout, .layout--toc { padding-left: 0 !important; display: block !important; }
 
-  /* Article fills the page edge-to-edge. The table-paged wrapper handles per-page
-     top spacing via its repeating thead; bottom padding lives on the article itself. */
+  /* Article fills the page edge-to-edge. The table-paged wrapper's thead/tfoot
+     repeat on every page providing per-page top and bottom space. */
   .article {
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 0 24mm 0 !important;
+    padding: 0 !important;
     width: 100% !important;
   }
 
-  /* Restore the table structure so display:table-header-group repeats on every page */
+  /* Restore the table structure so thead/tfoot repeat on every printed page */
   .print-paged {
     display: table !important;
     width: 100% !important;
@@ -712,12 +715,15 @@ body {
   }
   .print-paged > thead         { display: table-header-group !important; }
   .print-paged > tbody         { display: table-row-group    !important; }
+  .print-paged > tfoot         { display: table-footer-group !important; }
   .print-paged > thead > tr,
-  .print-paged > tbody > tr    { display: table-row          !important; }
+  .print-paged > tbody > tr,
+  .print-paged > tfoot > tr    { display: table-row          !important; }
   .print-paged__top,
-  .print-paged__main           { display: table-cell         !important; padding: 0; }
+  .print-paged__main,
+  .print-paged__bottom         { display: table-cell         !important; padding: 0; }
 
-  /* The repeating per-page top: Quantica logo + leading spacing */
+  /* Repeating per-page top: Quantica logo + leading spacing */
   .print-paged__top {
     padding: 14mm 18mm 8mm 18mm !important;
   }
@@ -731,9 +737,16 @@ body {
     margin: 0;
   }
 
-  /* Main content cell — side padding only (top is from the thead repeat, bottom from .article) */
+  /* Repeating per-page bottom: empty cell that reserves bottom margin on every page */
+  .print-paged__bottom {
+    height: 20mm !important;
+    padding: 0 18mm !important;
+  }
+
+  /* Main content cell — side padding only (top from thead, bottom from tfoot) */
   .print-paged__main {
     padding: 0 18mm !important;
+    vertical-align: top;
   }
 
   /* Text-level orphan/widow protection — no single lines at page top/bottom */
@@ -835,39 +848,51 @@ body {
   }
 
   /* ── ORPHAN-HEADING PREVENTION ───────────────────────────────────────────
-     Belt-and-suspenders approach:
-       1. Every heading: break-inside + break-after both avoid
-       2. The element AFTER a heading: break-before also avoid
-     Both sides are needed because some engines honour only one of the two. */
-  h1, h2, h3, h4, h5, h6,
-  .md-h1, .md-h2, .md-h3,
+     Inside a table-cell context Chrome's break engine is finicky and the
+     standard `break-after: avoid` is sometimes ignored. The trick that works
+     reliably: add an invisible "anchor" pseudo-element after every heading
+     that reserves ~24mm of vertical space. If the remaining page height is
+     less than that anchor, Chrome pushes the whole heading to the next page.
+     A negative margin-bottom cancels the visual height so layout is unchanged. */
+
+  .article__body h1,
+  .article__body h2,
+  .article__body h3,
+  .article__body h4,
+  .article__body h5,
+  .article__body h6,
   .article-fm__title,
   .article-fm__eyebrow,
   .article-fm__subtitle {
-    page-break-after: avoid !important;
-    break-after: avoid-page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+    break-after: avoid;
+    page-break-after: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
-  h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + *,
-  .md-h1 + *, .md-h2 + *, .md-h3 + *,
-  .article-fm__title + *, .article-fm__eyebrow + *, .article-fm__subtitle + * {
-    page-break-before: avoid !important;
-    break-before: avoid-page !important;
+  /* Invisible "keep-with-next" anchor */
+  .article__body h1::after,
+  .article__body h2::after,
+  .article__body h3::after,
+  .article__body h4::after {
+    content: "";
+    display: block;
+    height: 24mm;
+    margin-bottom: -24mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   /* Keep the entire front-matter block together (eyebrow + title + subtitle + rule) */
   .article-fm {
-    page-break-inside: avoid;
     break-inside: avoid;
+    page-break-inside: avoid;
   }
 
-  /* Keep list items and task items together */
+  /* Keep list items and task items intact */
   .task-item,
   .article__body li {
-    page-break-inside: avoid;
     break-inside: avoid;
+    page-break-inside: avoid;
   }
-
 }
