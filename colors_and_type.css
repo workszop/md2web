@@ -1,0 +1,264 @@
+/* ==========================================================================
+   QUANTICA LAB — Color & Type Foundations
+   Source of truth for tokens used across the brand.
+   ========================================================================== */
+
+/* ---- WEB FONTS ----------------------------------------------------------- */
+/* Satoshi: paid font from Indian Type Foundry / Fontshare. We load via
+   Fontshare CDN (free for personal & commercial). Substitute locally if
+   building offline by dropping .woff2 files in fonts/ and updating @font-face. */
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap");
+
+/* Geist Mono: Vercel's mono. Available via Google Fonts. */
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap");
+
+
+:root {
+  /* ====================================================================== */
+  /*  COLOR — PRIMARY PALETTE                                               */
+  /*  These are the foundation colors. Quantica Pink is the hero.           */
+  /* ====================================================================== */
+  --quantica-pink:    #C41E54;   /* Foundation. Buttons, headlines, brand. */
+  --rose-pink:        #FF4D9A;   /* Emphasis. Accents, highlights.        */
+  --deep-berry:       #8A004C;   /* Foundation. Hover/pressed, depth.     */
+  --near-black:       #111111;   /* Foundation text + dark surfaces.       */
+  --white:            #FFFFFF;   /* Atmosphere. Light surfaces.            */
+
+  /* ====================================================================== */
+  /*  COLOR — SECONDARY PALETTE (atmosphere / neutrals tinted toward brand) */
+  /* ====================================================================== */
+  --magenta-tint:     #FFE6F1;   /* Soft background wash, badges.         */
+  --soft-lilac:       #F3E8FF;   /* Neutral with cool tint.               */
+  --cool-gray:        #E6E8EC;   /* Borders, dividers, inactive.          */
+  --light-gray:       #F5F6F8;   /* Page surface, panel bg.               */
+  --silver:           #D1D5DB;   /* Disabled, placeholder.                */
+
+  /* ====================================================================== */
+  /*  COLOR — VIOLET PAIR (Magenta + Violet direction — adopted)            */
+  /*  Replaces earlier teal pair. Use violet alongside magenta for          */
+  /*  secondary accents, callouts, and supporting structure.                */
+  /* ====================================================================== */
+  --violet-primary:   #7030A0;   /* Emphasis (was --teal) */
+  --violet-deep:      #4F1F75;   /* Foundation depth (was --deep-teal) */
+  --ink:              #0A1F2C;   /* Cool dark grounding */
+  --mist:             #F4EEFA;   /* Cool atmosphere — violet-tinted */
+
+  /* Legacy aliases — kept so existing references don't break.              */
+  /* New work should use --violet-primary / --violet-deep.                  */
+  --teal:             #7030A0;
+  --deep-teal:        #4F1F75;
+
+  /* ====================================================================== */
+  /*  COLOR — ACCENT PALETTE (data viz, status, emphasis)                   */
+  /* ====================================================================== */
+  --electric-pink:    #FF20A1;
+  --violet:           #7861FF;
+  --indigo:           #4F46E5;
+  --amber:            #FFC107;
+
+  /* ====================================================================== */
+  /*  COLOR — SEMANTIC                                                      */
+  /* ====================================================================== */
+  /* Foreground */
+  --fg-1:             #111111;   /* Primary text */
+  --fg-2:             #3A3A42;   /* Secondary text */
+  --fg-3:             #6B6B76;   /* Tertiary / metadata */
+  --fg-4:             #9A9AA5;   /* Placeholder, disabled */
+  --fg-on-pink:       #FFFFFF;   /* Text on Quantica Pink */
+  --fg-brand:         #C41E54;   /* Branded text / links */
+
+  /* Background */
+  --bg-1:             #FFFFFF;   /* Base canvas */
+  --bg-2:             #F5F6F8;   /* Subtle panel */
+  --bg-3:             #FFE6F1;   /* Brand-tinted wash */
+  --bg-inverse:       #111111;   /* Dark mode surfaces */
+  --bg-inverse-2:     #1B1B22;   /* Dark elevated surface */
+
+  /* Borders */
+  --border-1:         #E6E8EC;   /* Default hairline */
+  --border-2:         #D1D5DB;   /* Stronger divider */
+  --border-brand:     #C41E54;   /* Brand outlines */
+  --border-focus:     #FF4D9A;   /* Focus rings */
+
+  /* Status */
+  --status-success:   #00A37A;   /* Success stays green; decoupled from violet pair */
+  --status-warning:   #FFC107;
+  --status-error:     #DC2626;
+  --status-info:      #4F46E5;
+
+  /* Gradients — pulled directly from the brand board */
+  --grad-hot-pink:    linear-gradient(90deg, #C41E54 0%, #FF20A1 50%, #FFC0DB 100%);
+  --grad-magenta:     linear-gradient(90deg, #C41E54 0%, #FF20A1 50%, #7030A0 100%);
+  --grad-violet:      linear-gradient(90deg, #4F1F75 0%, #7030A0 50%, #C41E54 100%);
+  --grad-spectrum:    linear-gradient(90deg, #C41E54 0%, #FF20A1 30%, #FFC107 65%, #7030A0 100%);
+
+  /* ====================================================================== */
+  /*  TYPOGRAPHY — FAMILIES                                                 */
+  /* ====================================================================== */
+  --font-display:     "Satoshi", "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans:        "Satoshi", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:        "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ====================================================================== */
+  /*  TYPOGRAPHY — SCALE                                                    */
+  /*  Hierarchy from brand board: H1 56/64, H2 28/36, H3 20/28, body 14/24, */
+  /*  caption 12/20. Negative tracking on display (-1% to -2%).             */
+  /* ====================================================================== */
+  --fs-display:       72px;
+  --fs-h1:            56px;
+  --fs-h2:            28px;
+  --fs-h3:            20px;
+  --fs-body-lg:       18px;
+  --fs-body:          14px;
+  --fs-caption:       12px;
+  --fs-micro:         11px;
+
+  --lh-display:       1.05;
+  --lh-h1:            1.1;
+  --lh-h2:            1.25;
+  --lh-h3:            1.4;
+  --lh-body:          1.65;
+  --lh-tight:         1.2;
+
+  --tracking-display: -0.02em;
+  --tracking-h1:      -0.01em;
+  --tracking-body:    0;
+  --tracking-mono:    0;
+  --tracking-caps:    0.08em;
+
+  --fw-light:         300;
+  --fw-regular:       400;
+  --fw-medium:        500;
+  --fw-bold:          700;
+  --fw-black:         900;
+
+  /* ====================================================================== */
+  /*  SPACING — 8px base, with 4px halfsteps                                */
+  /* ====================================================================== */
+  --space-0:          0;
+  --space-1:          4px;
+  --space-2:          8px;
+  --space-3:          12px;
+  --space-4:          16px;
+  --space-5:          24px;
+  --space-6:          32px;
+  --space-7:          40px;
+  --space-8:          48px;
+  --space-9:          64px;
+  --space-10:         96px;
+  --space-11:         128px;
+
+  /* ====================================================================== */
+  /*  RADIUS                                                                */
+  /* ====================================================================== */
+  --radius-xs:        4px;
+  --radius-sm:        6px;
+  --radius-md:        10px;
+  --radius-lg:        16px;
+  --radius-xl:        24px;
+  --radius-pill:      999px;
+
+  /* ====================================================================== */
+  /*  SHADOWS — soft, never heavy. Pink-tinted at brand-adjacent layers.    */
+  /* ====================================================================== */
+  --shadow-xs:        0 1px 2px rgba(17, 17, 17, 0.04);
+  --shadow-sm:        0 2px 6px rgba(17, 17, 17, 0.06);
+  --shadow-md:        0 8px 24px rgba(17, 17, 17, 0.08);
+  --shadow-lg:        0 20px 48px rgba(17, 17, 17, 0.10);
+  --shadow-pink:      0 12px 32px rgba(196, 30, 84, 0.18);
+  --shadow-pink-soft: 0 6px 18px rgba(196, 30, 84, 0.10);
+  --inner-hairline:   inset 0 0 0 1px rgba(17, 17, 17, 0.06);
+
+  /* ====================================================================== */
+  /*  MOTION                                                                */
+  /* ====================================================================== */
+  --ease-standard:    cubic-bezier(0.2, 0.6, 0.2, 1);
+  --ease-emphasized:  cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1:            120ms;
+  --dur-2:            200ms;
+  --dur-3:            320ms;
+  --dur-4:            480ms;
+}
+
+
+/* ==========================================================================
+   SEMANTIC TYPE STYLES
+   Use the class OR copy the rule. Not auto-applied to bare elements.
+   ========================================================================== */
+
+.type-display,
+.type-h1,
+.type-h2,
+.type-h3,
+.type-body,
+.type-body-lg,
+.type-caption,
+.type-eyebrow,
+.type-mono {
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.type-display {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--fw-bold);
+}
+
+.type-h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--tracking-h1);
+  font-weight: var(--fw-bold);
+}
+
+.type-h2 {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  font-weight: var(--fw-medium);
+}
+
+.type-h3 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+  font-weight: var(--fw-medium);
+}
+
+.type-body-lg {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+}
+
+.type-body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+  color: var(--fg-2);
+}
+
+.type-caption {
+  font-size: var(--fs-caption);
+  line-height: 1.5;
+  color: var(--fg-3);
+}
+
+.type-eyebrow {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-brand);
+}
+
+.type-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  line-height: 1.6;
+  color: var(--fg-2);
+}
