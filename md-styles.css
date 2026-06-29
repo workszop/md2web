@@ -245,7 +245,7 @@ body {
 /* ── Article container ────────────────────────────────────────────────────── */
 .article {
   width: 100%;
-  max-width: 820px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: var(--space-9) var(--space-7) var(--space-11);
 }
@@ -344,7 +344,7 @@ body {
   font-size: var(--fs-body-lg);
   line-height: var(--lh-body);
   color: var(--fg-2);
-  max-width: 70ch;
+  max-width: 80ch;
 }
 
 /* ── Bold / Italic ────────────────────────────────────────────────────────── */
@@ -630,6 +630,29 @@ body {
 }
 
 
+/* ── Toast (non-blocking error notice) ────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translate(-50%, calc(100% + var(--space-6)));
+  z-index: 100;
+  max-width: 90vw;
+  padding: var(--space-3) var(--space-5);
+  background: var(--status-error);
+  color: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-3, 0 8px 24px rgba(0, 0, 0, 0.18));
+  font-size: var(--fs-body);
+  opacity: 0;
+  transition: transform var(--dur-2) var(--ease-out-soft),
+              opacity var(--dur-2) var(--ease-out-soft);
+}
+.toast--visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
@@ -693,7 +716,8 @@ body {
   .site-footer,
   .drop-overlay,
   .btn-primary,
-  .btn-secondary { display: none !important; }
+  .btn-secondary,
+  .toast { display: none !important; }
 
   .layout, .layout--toc { padding-left: 0 !important; display: block !important; }
 

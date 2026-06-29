@@ -7,12 +7,17 @@
   <link rel="stylesheet" href="colors_and_type.css" />
   <link rel="stylesheet" href="md-styles.css" />
   <!-- highlight.js base theme — we override all token colors in md-styles.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/grayscale-light.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/grayscale-light.min.css"
+        integrity="sha384-6H/VOyzdPru8fePfjI9d6g0iGg/bsIT+QXgRSRwqeWqMHEHBbvRyGRw3YUhCLnIr" crossorigin="anonymous" />
 
-  <!-- All libraries loaded as plain UMD scripts so the app works from file:// without a server -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.11/dist/purify.min.js"></script>
+  <!-- Libraries are plain UMD scripts (no bundler/ES-module server needed), loaded from CDN
+       with Subresource Integrity. Note: an internet connection is required on first load. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+          integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"
+          integrity="sha384-/TQbtLCAerC3jgaim+N78RZSDYV7ryeoBCVqTuzRrFec2akfBkHS7ACQ3PQhvMVi" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.11/dist/purify.min.js"
+          integrity="sha384-Ic7KEGROu37YaruU6NyiYeib7UhjFyDZQ5fzBAji965L75T/4LGk5nzwMEjNGexs" crossorigin="anonymous"></script>
 </head>
 <body>
 

@@ -11,7 +11,7 @@
   if (!window.marked || !window.DOMPurify || !window.hljs) {
     document.addEventListener('DOMContentLoaded', () => {
       document.body.innerHTML =
-        '<div style="padding:40px;font-family:system-ui;color:#C41E54">' +
+        '<div style="padding:40px;font-family:system-ui;color:var(--status-error)">' +
         '<h1>Failed to load libraries</h1>' +
         '<p>marked / DOMPurify / highlight.js could not be loaded from the CDN. ' +
         'Check your internet connection and reload the page.</p></div>';
@@ -28,12 +28,25 @@
   let articleHeader, articleBody, tocNav, tocList, topbarMeta, siteFooter;
   let btnPdf;
 
+  // ── Heading slugs: deduped per render so anchors/TOC links stay unique ────
+  // marked v12.0.2 uses positional renderer args; do NOT bump marked without
+  // checking — later versions switch renderers to a single token object.
+  let usedSlugs = new Set();
+  function slugify(raw) {
+    let base = String(raw).toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+    if (!base) base = 'section';
+    let slug = base, n = 1;
+    while (usedSlugs.has(slug)) { slug = base + '-' + (++n); }
+    usedSlugs.add(slug);
+    return slug;
+  }
+
   // ── marked: positional-argument renderer (correct for marked v12) ─────────
   marked.use({
     gfm: true,
     renderer: {
       heading(text, level, raw) {
-        const slug = String(raw).toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
+        const slug = slugify(raw);
         return '<h' + level + ' id="' + slug + '" class="md-h' + level + '">' + text + '</h' + level + '>\n';
       },
 
@@ -60,9 +73,14 @@
         const validLang = lang && hljs.getLanguage(lang) ? lang : null;
         let hl;
         try {
-          hl = validLang
-            ? hljs.highlight(code, { language: validLang }).value
-            : hljs.highlightAuto(code).value;
+          if (validLang) {
+            hl = hljs.highlight(code, { language: validLang }).value;
+          } else if (code.length <= 50000) {
+            // Auto-detection is expensive; skip it for very large unlabeled blocks
+            hl = hljs.highlightAuto(code).value;
+          } else {
+            hl = escapeHtml(code);
+          }
         } catch (e) {
           hl = escapeHtml(code);
         }
@@ -99,16 +117,18 @@
 
   function render(rawMd, filename) {
     currentFilename = filename || '';
+    usedSlugs = new Set();  // reset per render so heading IDs stay unique
     const { fm, body } = parseFrontMatter(rawMd);
 
     articleHeader.innerHTML = '';
     if (fm.title || fm.category || fm.date || fm.author) {
-      const eyebrow = [fm.category, fm.date, fm.author].filter(Boolean).join(' · ');
+      // Front-matter values are plain text — escape before injecting as HTML.
+      const eyebrow = [fm.category, fm.date, fm.author].filter(Boolean).map(escapeHtml).join(' · ');
       articleHeader.innerHTML =
         '<div class="article-fm">' +
         (eyebrow      ? '<p class="type-eyebrow article-fm__eyebrow">' + eyebrow + '</p>' : '') +
-        (fm.title     ? '<h1 class="article-fm__title">' + fm.title + '</h1>' : '') +
-        (fm.subtitle  ? '<p class="article-fm__subtitle type-body-lg">' + fm.subtitle + '</p>' : '') +
+        (fm.title     ? '<h1 class="article-fm__title">' + escapeHtml(fm.title) + '</h1>' : '') +
+        (fm.subtitle  ? '<p class="article-fm__subtitle type-body-lg">' + escapeHtml(fm.subtitle) + '</p>' : '') +
         '<div class="article-fm__rule"></div>' +
         '</div>';
     }
@@ -204,12 +224,29 @@
     setTimeout(() => { document.title = originalTitle; }, 100);
   }
 
+  // ── Styled, auto-dismissing toast (replaces blocking alert) ─────────────────
+  let toastTimer;
+  function showToast(message) {
+    let toast = document.getElementById('toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'toast';
+      toast.setAttribute('role', 'alert');
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add('toast--visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('toast--visible'), 5000);
+  }
+
   // ── File loading ───────────────────────────────────────────────────────────
   function loadFile(file) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload  = e => render(e.target.result, file.name);
-    reader.onerror = e => alert('Failed to read file: ' + e.target.error);
+    reader.onerror = e => showToast('Failed to read file: ' + (e.target.error || 'unknown error'));
     reader.readAsText(file);
   }
 
