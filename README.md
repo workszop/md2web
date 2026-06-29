@@ -74,11 +74,13 @@ supported.
 
 ## Maintenance notes
 
-- **Do not bump `marked` past 12.0.2 without testing.** The custom renderer in
-  `app.js` relies on marked v12's **positional** renderer arguments
-  (`heading(text, level, raw)`). Later marked versions switch renderers to a
-  single token-object argument, which would silently break heading IDs, code
-  blocks, tables, and images.
+- The custom renderer in `app.js` uses marked's **object-argument** API
+  (`heading({ text, depth, tokens })`), introduced in **marked v14.0.0** and
+  current through v18. If you ever downgrade below v14 the renderer will break,
+  since older versions pass positional arguments. Child tokens are rendered with
+  `this.parser.parseInline()` / `.parse()`.
+- marked 18 ships its UMD build at `lib/marked.umd.js` (older versions used
+  `marked.min.js`) — keep that path if you bump the version.
 - CDN URLs carry SRI `integrity` hashes — if you change a library version, the
   hash must be regenerated or the resource will be blocked by the browser.
 

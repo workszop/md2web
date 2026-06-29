@@ -29,8 +29,6 @@
   let btnPdf;
 
   // ── Heading slugs: deduped per render so anchors/TOC links stay unique ────
-  // marked v12.0.2 uses positional renderer args; do NOT bump marked without
-  // checking — later versions switch renderers to a single token object.
   let usedSlugs = new Set();
   function slugify(raw) {
     let base = String(raw).toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
@@ -41,51 +39,60 @@
     return slug;
   }
 
-  // ── marked: positional-argument renderer (correct for marked v12) ─────────
+  // ── marked: object-argument renderer (marked v14+, tested on v18) ─────────
+  // Each renderer method receives a single token object and uses
+  // `this.parser.parseInline()` / `.parse()` to render child tokens to HTML.
   marked.use({
     gfm: true,
     renderer: {
-      heading(text, level, raw) {
-        const slug = slugify(raw);
-        return '<h' + level + ' id="' + slug + '" class="md-h' + level + '">' + text + '</h' + level + '>\n';
+      heading({ text, depth, tokens }) {
+        const slug = slugify(text);
+        const inner = this.parser.parseInline(tokens);
+        return '<h' + depth + ' id="' + slug + '" class="md-h' + depth + '">' + inner + '</h' + depth + '>\n';
       },
 
-      blockquote(quote) {
-        return '<blockquote class="md-blockquote">' + quote + '</blockquote>\n';
+      blockquote({ tokens }) {
+        return '<blockquote class="md-blockquote">' + this.parser.parse(tokens) + '</blockquote>\n';
       },
 
       hr() {
         return '<div class="md-hr" role="separator"><span></span></div>\n';
       },
 
-      image(href, title, text) {
-        const titleAttr = title ? ' title="' + title + '"' : '';
-        const cap = title ? '<figcaption>' + title + '</figcaption>' : '';
-        return '<figure class="md-figure"><img src="' + href + '" alt="' + (text || '') + '"' + titleAttr + ' loading="lazy" />' + cap + '</figure>\n';
+      image({ href, title, text }) {
+        const titleAttr = title ? ' title="' + escapeHtml(title) + '"' : '';
+        const cap = title ? '<figcaption>' + escapeHtml(title) + '</figcaption>' : '';
+        return '<figure class="md-figure"><img src="' + href + '" alt="' + escapeHtml(text || '') + '"' + titleAttr + ' loading="lazy" />' + cap + '</figure>\n';
       },
 
-      table(header, body) {
-        return '<div class="md-table-wrap"><table class="md-table"><thead>' + header + '</thead><tbody>' + body + '</tbody></table></div>\n';
+      table({ header, rows }) {
+        const align = cell => cell.align ? ' style="text-align:' + cell.align + '"' : '';
+        const head = '<tr>' + header.map(cell =>
+          '<th' + align(cell) + '>' + this.parser.parseInline(cell.tokens) + '</th>').join('') + '</tr>';
+        const body = rows.map(row =>
+          '<tr>' + row.map(cell =>
+            '<td' + align(cell) + '>' + this.parser.parseInline(cell.tokens) + '</td>').join('') + '</tr>').join('');
+        return '<div class="md-table-wrap"><table class="md-table"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>\n';
       },
 
-      code(code, infostring) {
+      code({ text, lang: infostring }) {
         const lang = (infostring || '').match(/\S*/)[0];
         const validLang = lang && hljs.getLanguage(lang) ? lang : null;
         let hl;
         try {
           if (validLang) {
-            hl = hljs.highlight(code, { language: validLang }).value;
-          } else if (code.length <= 50000) {
+            hl = hljs.highlight(text, { language: validLang }).value;
+          } else if (text.length <= 50000) {
             // Auto-detection is expensive; skip it for very large unlabeled blocks
-            hl = hljs.highlightAuto(code).value;
+            hl = hljs.highlightAuto(text).value;
           } else {
-            hl = escapeHtml(code);
+            hl = escapeHtml(text);
           }
         } catch (e) {
-          hl = escapeHtml(code);
+          hl = escapeHtml(text);
         }
-        const label = lang ? '<span class="code-lang">' + lang + '</span>' : '';
-        return '<div class="md-code-block">' + label + '<pre><code class="hljs' + (lang ? ' language-' + lang : '') + '">' + hl + '</code></pre></div>\n';
+        const label = lang ? '<span class="code-lang">' + escapeHtml(lang) + '</span>' : '';
+        return '<div class="md-code-block">' + label + '<pre><code class="hljs' + (lang ? ' language-' + escapeHtml(lang) : '') + '">' + hl + '</code></pre></div>\n';
       },
     },
   });
