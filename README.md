@@ -88,7 +88,6 @@ supported.
 | `design-guide.html` | Rendered Quantica design reference |
 | `sample.md` | Demo document |
 | `assets/` | Quantica logos and marks |
-| `mockups/` | Clickable design mockups of the formatting panel (popover / drawer / toolbar variants) |
 
 ## Maintenance notes
 
