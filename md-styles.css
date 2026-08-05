@@ -845,7 +845,7 @@ body {
    ========================================================================== */
 @media (max-width: 1100px) {
   .sidebar { display: none; }
-  .layout--side .article { margin-left: 0; }
+  .layout--side { padding-left: 0; }
 }
 
 @media (max-width: 760px) {
