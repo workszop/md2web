@@ -7,6 +7,23 @@ print-ready page with a generated table of contents and one-click PDF export.
 ## Features
 
 - **Drag & drop or file picker** — load any `.md`, `.markdown`, or `.txt` file.
+- **Multi-file sessions** — open or drop several files at once; they appear in
+  a *Files* list in the sidebar (above the table of contents). Click to switch
+  (scroll position is remembered per file), hover to reveal a close button.
+- **Formatting panel** — the *Format* button opens a popover with article-scoped
+  options, persisted in `localStorage` and applied before first paint:
+  - *Accent*: six swatches (Quantica pink, electric pink, violet, indigo,
+    emerald, ink) plus a **color mixer** for any custom accent. Deep/hover/wash
+    variants are derived with `color-mix()`, so custom colors get correct
+    hover and tint states for free.
+  - *Font*: Satoshi (brand default), Poppins, Lato, or Raleway — applied to the
+    article only; UI chrome stays in Satoshi.
+  - *Size* (S/M/L), *Line spacing* (tight/normal/loose), *Measure*
+    (narrow/default/wide).
+  - *Theme*: light, sepia, or dark. Print always uses the light theme; the
+    chosen accent, font, and size carry over into the PDF.
+  - The panel writes `data-md-*` attributes on `<html>` — all styling flows
+    from CSS tokens keyed off those attributes (see the top of `md-styles.css`).
 - **GitHub-flavored Markdown** via [marked](https://marked.js.org/) — tables,
   task lists (rendered with brand SVG icons), fenced code, etc.
 - **Syntax highlighting** via [highlight.js](https://highlightjs.org/) with
@@ -71,6 +88,7 @@ supported.
 | `design-guide.html` | Rendered Quantica design reference |
 | `sample.md` | Demo document |
 | `assets/` | Quantica logos and marks |
+| `mockups/` | Clickable design mockups of the formatting panel (popover / drawer / toolbar variants) |
 
 ## Maintenance notes
 

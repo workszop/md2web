@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" data-accent="pink" data-font="satoshi" data-scale="md" data-leading="normal" data-measure="default" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>md2web mockup C — toolbar panel</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ─── Variant C: inline toolbar row that expands under the topbar ─────── */
+    .format-bar {
+      position: sticky;
+      top: 64px;
+      z-index: 39;
+      display: none;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: var(--space-5) var(--space-6);
+      padding: var(--space-3) var(--space-6) var(--space-4);
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--page-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .format-bar.is-open { display: flex; animation: bar-in var(--dur-2) var(--ease-out-soft); }
+    @keyframes bar-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .format-bar .swatch-row { align-items: center; height: 30px; }
+    .format-bar__state { margin-left: auto; align-self: center; }
+    @media (max-width: 768px) {
+      .format-bar { padding: var(--space-3) var(--space-4); gap: var(--space-4); }
+      .format-bar__state { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="topbar__logo" href="#" aria-label="Quantica Lab">
+      <img class="logo-light" src="../assets/quantica-logo-color.png" alt="Quantica Lab" />
+      <img class="logo-dark" src="../assets/quantica-logo-white.png" alt="Quantica Lab" />
+    </a>
+    <div class="topbar__meta">
+      <span class="topbar__filename">forecasting.md</span>
+      <span>mockup C · toolbar</span>
+    </div>
+    <div class="topbar__actions">
+      <button class="btn-chrome btn-chrome--secondary" id="btn-format" type="button"
+              aria-expanded="false" aria-controls="format-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></svg>
+        Format
+      </button>
+      <button class="btn-chrome btn-chrome--primary" type="button">Export PDF</button>
+    </div>
+  </header>
+
+  <div class="format-bar" id="format-bar" role="region" aria-label="Formatting options">
+    <div class="ctl-group">
+      <span class="ctl-label">Accent</span>
+      <div class="swatch-row" role="group" aria-label="Accent color">
+        <button class="swatch" data-set="accent" data-value="pink"     style="--sw:var(--quantica-pink)"  aria-label="Quantica pink"  type="button"></button>
+        <button class="swatch" data-set="accent" data-value="violet"   style="--sw:var(--violet-primary)" aria-label="Violet"         type="button"></button>
+        <button class="swatch" data-set="accent" data-value="indigo"   style="--sw:var(--indigo)"         aria-label="Indigo"         type="button"></button>
+        <button class="swatch" data-set="accent" data-value="ink"      style="--sw:var(--ink)"            aria-label="Ink"            type="button"></button>
+        <button class="swatch" data-set="accent" data-value="electric" style="--sw:var(--electric-pink)"  aria-label="Electric pink"  type="button"></button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label">Font</span>
+      <div class="seg" role="group" aria-label="Body font">
+        <button class="seg__btn" data-set="font" data-value="satoshi" type="button">Satoshi</button>
+        <button class="seg__btn" data-set="font" data-value="serif"   type="button">Serif</button>
+        <button class="seg__btn" data-set="font" data-value="system"  type="button">System</button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label">Size</span>
+      <div class="seg" role="group" aria-label="Text size">
+        <button class="seg__btn" data-set="scale" data-value="sm" type="button">S</button>
+        <button class="seg__btn" data-set="scale" data-value="md" type="button">M</button>
+        <button class="seg__btn" data-set="scale" data-value="lg" type="button">L</button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label">Spacing</span>
+      <div class="seg" role="group" aria-label="Line spacing">
+        <button class="seg__btn" data-set="leading" data-value="compact" type="button">Tight</button>
+        <button class="seg__btn" data-set="leading" data-value="normal"  type="button">Normal</button>
+        <button class="seg__btn" data-set="leading" data-value="relaxed" type="button">Loose</button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label">Measure</span>
+      <div class="seg" role="group" aria-label="Content width">
+        <button class="seg__btn" data-set="measure" data-value="narrow"  type="button">Narrow</button>
+        <button class="seg__btn" data-set="measure" data-value="default" type="button">Default</button>
+        <button class="seg__btn" data-set="measure" data-value="wide"    type="button">Wide</button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label">Theme</span>
+      <div class="seg" role="group" aria-label="Reading theme">
+        <button class="seg__btn" data-set="theme" data-value="light" type="button">Light</button>
+        <button class="seg__btn" data-set="theme" data-value="sepia" type="button">Sepia</button>
+        <button class="seg__btn" data-set="theme" data-value="dark"  type="button">Dark</button>
+      </div>
+    </div>
+
+    <span class="panel-state format-bar__state" id="panel-state"></span>
+  </div>
+
+  <article class="article">
+    <div class="article-fm">
+      <p class="article-fm__eyebrow">Insights · 04 Aug 2026 · Quantica Lab</p>
+      <h1 class="article-fm__title">Demand forecasting, explained.</h1>
+      <p class="article-fm__subtitle">How eighteen months of sales history becomes a decision you can act on – and why most forecasts fail before the model is even chosen.</p>
+      <div class="article-fm__rule"></div>
+    </div>
+
+    <div class="article-body">
+      <p>Every operations team runs on a forecast, whether it admits it or not. The spreadsheet that says "order 400 units" is a model; it is just a model nobody maintains. This note walks through what changes when you treat forecasting as a <strong>product</strong> rather than a chore, using the same pipeline described in our <a href="#">demand playbook</a>.</p>
+
+      <h2 class="md-h2">Why forecasts drift</h2>
+      <p>Forecasts rarely fail loudly. They drift – a few percent a month – as promotions, seasonality, and supplier delays reshape the signal underneath a model trained on last year's world. The cost shows up elsewhere: stockouts on the ten products that matter, capital parked in the two hundred that don't.</p>
+      <blockquote class="md-blockquote"><p>From data to decisions. Faster.</p></blockquote>
+
+      <h2 class="md-h2">A minimal pipeline</h2>
+      <p>The working core is small. History in, calibrated intervals out, one job that reruns weekly:</p>
+      <div class="md-code-block"><span class="code-lang">python</span><pre><code>model = QuanticaForecaster(horizon=12)
+model.fit(sales[<span class="tok-s">"2024-01"</span>:<span class="tok-s">"2026-06"</span>])  <span class="tok-c"># eighteen months of history</span>
+forecast = model.predict(ci=0.9)
+forecast.to_dashboard(<span class="tok-s">"demand-q3"</span>)</code></pre></div>
+
+      <h2 class="md-h2">What good looks like</h2>
+      <p>Accuracy is the headline metric, but the operational numbers are what the business feels:</p>
+      <div class="md-table-wrap">
+        <table class="md-table">
+          <thead><tr><th>Metric</th><th>Baseline</th><th>With pipeline</th></tr></thead>
+          <tbody>
+            <tr><td>Forecast error (MAPE)</td><td>18.4%</td><td>7.2%</td></tr>
+            <tr><td>Stockout events / quarter</td><td>31</td><td>9</td></tr>
+            <tr><td>Analyst hours / week</td><td>14</td><td>2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="task-list">
+        <li class="task-item task-item--checked"><span class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Backtest on the 2025 holdout</li>
+        <li class="task-item task-item--checked"><span class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Ship the weekly forecast job</li>
+        <li class="task-item"><span class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>Wire drift alerts into the ops channel</li>
+      </ul>
+      <p>The model is the easy part. The discipline – backtests, drift alerts, a weekly cadence – is what keeps the forecast honest. More in the <a href="#">full playbook</a>.</p>
+    </div>
+  </article>
+
+  <nav class="mock-switch" aria-label="Mockup switcher">
+    <span>panel:</span>
+    <a href="panel-a-popover.html">A popover</a>
+    <a href="panel-b-drawer.html">B drawer</a>
+    <a class="is-current" href="panel-c-toolbar.html">C toolbar</a>
+  </nav>
+
+  <script src="shared.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      const btn = document.getElementById('btn-format');
+      const bar = document.getElementById('format-bar');
+
+      function setOpen(open) {
+        bar.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', open);
+      }
+      btn.addEventListener('click', () => setOpen(!bar.classList.contains('is-open')));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+    })();
+  </script>
+</body>
+</html>
