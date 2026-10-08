@@ -9,17 +9,17 @@
   <!-- Panel font options (Poppins / Lato / Raleway); Satoshi comes from colors_and_type.css -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;700&family=Raleway:wght@400;500;700&display=swap" />
   <!-- highlight.js base theme — we override all token colors in md-styles.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/grayscale-light.min.css"
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/grayscale-light.min.css"
         integrity="sha384-6H/VOyzdPru8fePfjI9d6g0iGg/bsIT+QXgRSRwqeWqMHEHBbvRyGRw3YUhCLnIr" crossorigin="anonymous" />
 
   <!-- Libraries are plain UMD scripts (no bundler/ES-module server needed), loaded from CDN
        with Subresource Integrity. Note: an internet connection is required on first load. -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
-          integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked@18.0.5/lib/marked.umd.js"
-          integrity="sha384-ZD0fTOwPMHi7zM6WTVIWJR21I07lq0ccnqz3J6WMvQKG9thh4y7TA1QE6PJu0Af8" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.11/dist/purify.min.js"
-          integrity="sha384-Ic7KEGROu37YaruU6NyiYeib7UhjFyDZQ5fzBAji965L75T/4LGk5nzwMEjNGexs" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
+          integrity="sha384-RH2xi4eIQ/gjtbs9fUXM68sLSi99C7ZWBRX1vDrVv6GQXRibxXLbwO2NGZB74MbU" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@18.0.9/lib/marked.umd.js"
+          integrity="sha384-kyb7rY2xnKgiRpRdAeNJxQ8e2SiGZy1m+FK9yME6M0eGJpg7EFaGGvf7+JSirgqE" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.4.13/dist/purify.min.js"
+          integrity="sha384-ZuC+DIACqSIZTsp+7YF57cR5Y+6qXa7YFbEKdA/EHA/R0T+41dtorqucYl71Zp+t" crossorigin="anonymous"></script>
 
   <!-- Apply saved formatting before first paint so there is no flash of default styling -->
   <script>
@@ -215,6 +215,6 @@
   <!-- screen-reader announcements (file loaded, formatting changed) -->
   <span id="sr-live" class="sr-only" aria-live="polite"></span>
 
-  <script src="app.js"></script>
+  <script defer src="app.js"></script>
 </body>
 </html>

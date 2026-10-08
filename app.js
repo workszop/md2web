@@ -127,7 +127,7 @@
   function parseFrontMatter(raw) {
     const fm = {};
     let body = raw;
-    if (raw.startsWith('---')) {
+    if (/^---[ \t]*(?:\n|$)/.test(raw)) {
       // Closing fence must be a line containing only `---`
       const end = raw.slice(3).search(/\n---[ \t]*(\n|$)/);
       if (end !== -1) {
@@ -175,8 +175,8 @@
     }
 
     articleBody.innerHTML = DOMPurify.sanitize(html, {
+      USE_PROFILES: { html: true },
       ADD_ATTR: ['id', 'loading', 'role'],
-      ADD_TAGS: ['figure', 'figcaption'],
     });
 
     // Replace GFM task-list checkboxes with brand SVG icons
@@ -253,7 +253,6 @@
 
   function finishAdd(entries) {
     const loaded = entries.filter(e => docs.includes(e));
-    renderFileList();
     if (loaded.length) {
       activateDoc(loaded[0].id);
       announce('Loaded ' + loaded.length + (loaded.length === 1 ? ' file: ' + loaded[0].name : ' files'));
@@ -284,12 +283,13 @@
       activeDocId = null;
       if (docs.length) {
         activateDoc((docs[idx] || docs[idx - 1]).id);
+        return;
       } else {
         showEmpty();
       }
     }
     renderFileList();
-    updateSidebar();
+    if (!wasActive) updateSidebar();
   }
 
   function renderFileList() {
